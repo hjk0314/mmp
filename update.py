@@ -7,6 +7,10 @@ import subprocess
 import os
 
 
+# pep8: 79 char line ==========================================================
+# pep8: 72 docstring or comments line ==================================
+
+
 # Synchronize the dev and pub folders.
 # Available in the madmanpost folder tree.
 class sync():
@@ -17,9 +21,10 @@ class sync():
 
     # UI.
     def setupUI(self):
-        if pm.window('Modeling_Synchronize', exists=True):
-            pm.deleteUI('Modeling_Synchronize')
-        win = pm.window('Modeling_Synchronize', t='SynChronize', s=True, rtf=True)
+        winStr = 'Modeling_Synchronize'
+        if pm.window(winStr, exists=True):
+            pm.deleteUI(winStr)
+        win = pm.window(winStr, t='SynChronize', s=True, rtf=True)
         pm.columnLayout(cat=('both', 4), rowSpacing=2, columnWidth=285)
         pm.separator(h=10)
         self.caseText = pm.text(h=23)
@@ -51,7 +56,10 @@ class sync():
             # set values
             cmp = self.compareFiles(fullPath)
             dev, pub, nwe = self.info(fullPath, dev=True, pub=True, nwe=True)
-            case = "=== Sync complete ===" if cmp else "*** Not synchronized ***"
+            if cmp:
+                case = "=== Sync complete ==="
+            else:
+                case = "*** Not synchronized ***"
             case += "\n" + nwe
             verDev = self.getMaxVersion(dev)
             verDev = verDev if verDev else "_____"
@@ -104,23 +112,37 @@ class sync():
 
     # Return scene's infomations.
     def info(self, fullPath, **kwargs):
+        # fullPath: "Y:/project/folder/mdl/pub/scenes/file_mdl_v0011.ma"
         idx = self.getIndex(fullPath)
         if not idx:
-            om.MGlobal.displayError("Check the folder tree with company rules.")
+            msg = "Check the folder tree with company rules."
+            om.MGlobal.displayError(msg)
         else:
-            # sample : "C:/Users/jkhong/Desktop/bundangA/mdl/pub/scenes/env_bundangA_mdl_v0011.ma"
-            dir = os.path.dirname(fullPath) # "C:/Users/jkhong/Desktop/bundangA/mdl/pub/scenes"
-            scn = os.path.basename(fullPath) # "env_bundangA_mdl_v0011.ma"
-            # nwe = nameWithoutExtension
-            nwe, ext = os.path.splitext(scn) # "env_bundangA_mdl_v0011"
-            wip = dir.split("/")[idx[0] + 1] # "pub"
-            typ = dir.split("/")[idx[0]] # "mdl"
-            ver = nwe.split("_")[-1] # "v0011"
-            # nwv = nameWithoutVersion
-            nwv = nwe.rsplit("_", 1)[0] # "env_bundangA_mdl"
-            if wip == 'dev': (dev, pub) = (dir, dir.replace("dev", "pub")) # "C:/Users/jkhong/Desktop/bundangA/mdl/dev"
-            if wip == 'pub': (dev, pub) = (dir.replace("pub", "dev"), dir) # "C:/Users/jkhong/Desktop/bundangA/mdl/pub"
-            abc = pub.replace('scenes', 'data/abc') # "C:/Users/jkhong/Desktop/bundangA/mdl/pub/data/abc"
+            # dir: "Y:/project/folder/mdl/pub/scenes"
+            dir = os.path.dirname(fullPath)
+            # "file_mdl_v0011.ma"
+            scn = os.path.basename(fullPath) 
+            # nwe: Name Without Extension
+            # nwe: "file_mdl_v0011"
+            # ext: ".ma"
+            nwe, ext = os.path.splitext(scn)
+            # wip: "pub"
+            wip = dir.split("/")[idx[0] + 1]
+            # typ: "mdl"
+            typ = dir.split("/")[idx[0]]
+            # ver: "v0011"
+            ver = nwe.split("_")[-1]
+            # nwv: Name Without Version
+            # nwv: file_mdl
+            nwv = nwe.rsplit("_", 1)[0]
+            # dev: "Y:/project/folder/mdl/dev"
+            # pub: "Y:/project/folder/mdl/pub"
+            if wip == 'dev':
+                (dev, pub) = (dir, dir.replace("dev", "pub"))
+            if wip == 'pub':
+                (dev, pub) = (dir.replace("pub", "dev"), dir)
+            # "Y:/project/folder/mdl/pub/data/abc"
+            abc = pub.replace('scenes', 'data/abc')
             # keys
             result = {
                 'dir': dir, 
@@ -141,7 +163,13 @@ class sync():
     # Returns the maximum version of the input directory.
     def getMaxVersion(self, dir):
         # File types are ".ma" or ".mb"
-        mayaList = [i for i in os.listdir(dir) if i.endswith('.ma') or i.endswith('.mb')]
+        mayaList = []
+        Files = os.listdir(dir)
+        for i in Files:
+            ma = i.endswith('.ma')
+            mb = i.endswith('.mb')
+            if ma or mb:
+                mayaList.append(i)
         verList = []
         for i in mayaList:
             fullPath = (dir + "/" + i)
@@ -153,7 +181,7 @@ class sync():
                 continue
             elif not ver.startswith('v'): # The first string is 'v'.
                 continue
-            elif not ver[1:].isdigit(): # The rest of the string is digit.
+            elif not ver[1:].isdigit(): # EveryThing except 'v' is digit
                 continue
             elif len(ver[1:]) != 4: # Digit Length is 4.
                 continue
@@ -179,7 +207,8 @@ class sync():
         if not os.path.isdir(pub): os.makedirs(pub)
         maxVerInDev = self.getMaxVersion(dev) # 'v0005' <- example
         maxVerInPub = self.getMaxVersion(pub) # 'v0004' <- example
-        finalString = self.compareVersion(maxVerInDev, maxVerInPub) # 'v0005' <- return the bigger
+        # 'v0005' <- return the bigger
+        finalString = self.compareVersion(maxVerInDev, maxVerInPub)
         finalNumber = int(finalString[1:]) + 1 # 'v0005' -> 6
         result = "v%04d" % finalNumber # 6 -> 'v0006'
         return result
@@ -188,7 +217,8 @@ class sync():
     # Make a sync full path.
     # Return the three path.
     def makeSyncNames(self, fullPath):
-        nwv, ext, dev, pub = self.info(fullPath, nwv=True, ext=True, dev=True, pub=True)
+        Info = self.info(fullPath, nwv=True, ext=True, dev=True, pub=True)
+        nwv, ext, dev, pub = Info
         ver = self.makeSyncVersion(dev, pub)
         devPath = f"{dev}/{nwv}_{ver}{ext}"
         pubPath = f"{pub}/{nwv}_{ver}{ext}"
@@ -200,10 +230,11 @@ class sync():
     # Compare Two Files.
     # maxNumber in devFolder = maxNumber in pubFolder
     def compareFiles(self, fullPath):
-        nwv, ext, dev, pub = self.info(fullPath, nwv=True, ext=True, dev=True, pub=True)
+        Info = self.info(fullPath, nwv=True, ext=True, dev=True, pub=True)
+        nwv, ext, dev, pub = Info
         maxVerInDev = self.getMaxVersion(dev)
         maxVerInPub = self.getMaxVersion(pub)
-        # Even if the real file is the same, return False, if the version is simply different.
+        # Even if the real file is the same, return False
         if maxVerInDev != maxVerInPub:
             result = False
         else:
@@ -312,7 +343,8 @@ class sync():
     def openNotepad(self):
         fullPath = pm.Env().sceneName()
         if not fullPath:
-            om.MGlobal.displayError("Unable to extract path from scene file.")
+            msg = "Unable to extract path from scene file."
+            om.MGlobal.displayError(msg)
         else:
             notePath = self.makeTextPath(fullPath)
             if not os.path.isfile(notePath):
@@ -329,4 +361,8 @@ class sync():
         else:
             pubFolder = self.info(fullPath, pub=True)
             os.startfile(pubFolder)
+
+
+# pep8: 79 char line ==========================================================
+# pep8: 72 docstring or comments line ==================================
 
