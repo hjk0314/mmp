@@ -24,6 +24,7 @@ def createMenuBar():
     # Sub menu start #
     # Check
     cmds.menuItem(l="Check", subMenu=True, parent=mainMenu, tearOff=True)
+    cmds.menuItem(l="MeshFace shader", c=lambda x: check.checkShd())
     cmds.menuItem(l="Same Names", c=lambda x: check.sameName())
     cmds.menuItem(l="Bad Names", c=lambda x: check.badName())
     cmds.setParent("..", menu=True)
@@ -44,4 +45,5 @@ def createMenuBar():
 
 # pep8: 79 char line ==========================================================
 # pep8: 72 docstring or comments line ==================================
+
 

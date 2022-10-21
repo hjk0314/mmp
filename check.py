@@ -76,3 +76,28 @@ def sameName():
     else:
         om.MGlobal.displayInfo("No same names.")
 
+
+# Check if two or more shading engines are connected to one object.
+def checkShd():
+    sel = pm.ls(dag=True, s=True, type=['mesh'])
+    cam = pm.ls(l=True, type=('camera'))
+    obj = [i for i in sel if i not in cam]
+    data = {}
+    for i in obj:
+        shd = [j for j in i.shadingGroups()]
+        data[i.getParent()] = shd
+    shds = [k for k in data if len(data[k]) != 1]
+    if not shds:
+        om.MGlobal.displayInfo("There are no MeshFace shaders.")
+    else:
+        pm.select(cl=True)
+        pm.select(shds)
+        for j in shds:
+            print(j)
+        om.MGlobal.displayError(f"{len(shds)} Objects are selected.")
+
+
+# 79 char line ================================================================
+# 72 docstring or comments line ========================================
+
+
