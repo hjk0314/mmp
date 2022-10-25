@@ -35,6 +35,7 @@ def createMenuBar():
     cmds.menuItem(l="Delete Vaccine", c=lambda x: tools.vaccine())
     cmds.menuItem(l="Bundangmain", c=lambda x: tools.bundangmain())
     cmds.menuItem(l="Unknown Plugins", c=lambda x: tools.delPlugin())
+    cmds.menuItem(l="Penetrating Curve", c=lambda x: tools.PenetratingCurve())
     cmds.setParent("..", menu=True)
     # Update
     cmds.menuItem(l="Update", subMenu=True, p=mainMenu, to=True)
