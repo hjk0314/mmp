@@ -885,6 +885,18 @@ def delPlugin():
         om.MGlobal.displayWarning("There are no unknown plugins.")
 
 
+# Seperate with Materail Name.
+def smn():
+    sel = pm.ls(sl=True)
+    for j in sel:
+        sepList = pm.polySeparate(j, ch=False)
+        for k in sepList:
+            shd = k.shadingGroups()[0] # shading engine
+            all = pm.listConnections(shd) # All connecting list
+            mat = pm.ls(all, mat=True)[0] # Only Material name
+            pm.rename(k, f"{k}_{mat}")
+
+
 # pep8: 79 char line ==========================================================
 # pep8: 72 docstring or comments line ==================================
 

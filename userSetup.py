@@ -30,6 +30,7 @@ def createMenuBar():
     cmds.setParent("..", menu=True)
     # Tools
     cmds.menuItem(l="Tools", subMenu=True, p=mainMenu, to=True)
+    cmds.menuItem(l="Separate with Mat name", c=lambda x: tools.smn())
     cmds.menuItem(l="Export Shader to Json", c=lambda x: tools.abc())
     cmds.menuItem(l="Speed", c=lambda x: tools.speed())
     cmds.menuItem(l="Delete Vaccine", c=lambda x: tools.vaccine())
