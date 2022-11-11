@@ -2,6 +2,7 @@ import re
 import os
 import math
 import json
+import subprocess
 import maya.OpenMaya as om
 import pymel.core as pm
 import maya.mel as mel
@@ -895,6 +896,16 @@ def smn():
             all = pm.listConnections(shd) # All connecting list
             mat = pm.ls(all, mat=True)[0] # Only Material name
             pm.rename(k, f"{k}_{mat}")
+
+
+# Open the Windows folder and copy the fullPath to the clipboard.
+def locationThisFile():
+    fullPath = pm.Env().sceneName()
+    dir = os.path.dirname(fullPath)
+    # copy the fullPath to the clipboard.
+    subprocess.run("clip", text=True, input=fullPath)
+    # Open the Windows folder
+    os.startfile(dir)
 
 
 # pep8: 79 char line ==========================================================
