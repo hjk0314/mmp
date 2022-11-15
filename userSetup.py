@@ -30,8 +30,8 @@ def createMenuBar():
     cmds.setParent("..", menu=True)
     # Tools
     cmds.menuItem(l="Tools", subMenu=True, p=mainMenu, to=True)
-    cmds.menuItem(l="Separate with Mat name", c=lambda x: tools.smn())
-    cmds.menuItem(l="Open Folder this scene", c=lambda x: tools.locationThisFile())
+    cmds.menuItem(l="Separate with Mat name", c=lambda x: tools.seperateMat())
+    cmds.menuItem(l="Open Folder this scene", c=lambda x: tools.openSaved())
     cmds.menuItem(l="Export Shader to Json", c=lambda x: tools.abc())
     cmds.menuItem(l="Speed", c=lambda x: tools.speed())
     cmds.menuItem(l="Delete Vaccine", c=lambda x: tools.vaccine())
@@ -41,7 +41,8 @@ def createMenuBar():
     cmds.setParent("..", menu=True)
     # Update
     cmds.menuItem(l="Update", subMenu=True, p=mainMenu, to=True)
-    cmds.menuItem(l="Sync", c=lambda x: update.sync())
+    cmds.menuItem(l="Sync", c=lambda x: print('Stop using: update.sync()'))
+    cmds.menuItem(l="Match Attr Deformed Shape", c=lambda x: update.MatchAttr())
     cmds.setParent("..", menu=True)
     # Sub menu end #
 

@@ -865,13 +865,6 @@ class PenetratingCurve:
                 self.create(point, check)
 
 
-# class end. ==================================================================
-# class end. ==================================================================
-# class end. ==================================================================
-# class end. ==================================================================
-# class end. ==================================================================
-
-
 # Attempt to delete unused plugins.
 def delPlugin():
     unknownList = pm.ls(type="unknown")
@@ -887,7 +880,7 @@ def delPlugin():
 
 
 # Seperate with Materail Name.
-def smn():
+def seperateMat():
     sel = pm.ls(sl=True)
     for j in sel:
         sepList = pm.polySeparate(j, ch=False)
@@ -899,7 +892,7 @@ def smn():
 
 
 # Open the Windows folder and copy the fullPath to the clipboard.
-def locationThisFile():
+def openSaved():
     fullPath = pm.Env().sceneName()
     dir = os.path.dirname(fullPath)
     # copy the fullPath to the clipboard.
