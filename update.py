@@ -461,9 +461,10 @@ class MatchAttr:
                 except:
                     continue
             diff = [i for i in attrA if attrA[i] != attrB[i]]
-            # The 'intermediateObject' must be different, 
+            # The 'intermediateObject' and 'boundingBox' must be different, 
             # so remove it in diff list.
-            diff.remove('intermediateObject')
+            diff = [i for i in diff if not 'boundingBox' in i]
+            diff = [i for i in diff if not 'intermediateObject' in i]
             if not diff:
                 result = False
             else:
