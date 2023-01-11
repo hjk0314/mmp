@@ -30,6 +30,7 @@ def createMenuBar():
     cmds.setParent("..", menu=True)
     # Tools
     cmds.menuItem(l="Tools", subMenu=True, p=mainMenu, to=True)
+    cmds.menuItem(l="Rotate Automically", c=lambda x: tools.AutoWheel2())
     cmds.menuItem(l="Separate with Mat name", c=lambda x: tools.seperateMat())
     cmds.menuItem(l="Open Folder this scene", c=lambda x: tools.openSaved())
     cmds.menuItem(l="Export Shader to Json", c=lambda x: tools.abc())
