@@ -2,6 +2,7 @@ import re
 import os
 import math
 import json
+import shutil
 import subprocess
 import maya.OpenMaya as om
 import pymel.core as pm
@@ -984,6 +985,24 @@ def openSaved():
     subprocess.run("clip", text=True, input=fullPath)
     # Open the Windows folder
     os.startfile(dir)
+
+
+def makeFolder():
+    """ Copy Source folder to New Folder """
+    src = r"T:\AssetTeam\Share\Templates\MayaProjectSample"
+    folder = pm.fileDialog2(fm=0, ds=2, okc='Create', cap='Create Folder')
+    srcCheck = os.path.isdir(src)
+    if not srcCheck:
+        print("There is no source folder.\n", src)
+        return
+    elif folder == None:
+        return
+    else:
+        folder = folder[0]
+        folderPath = os.path.splitext(folder)[0]
+        shutil.copytree(src, folderPath)
+        os.startfile(folderPath)
+        return folderPath
 
 
 # pep8: 79 char line ==========================================================
